@@ -5,7 +5,6 @@ import 'package:musicapp/route/index.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false, // 消除右上角debug样式
-      // initialRoute: '/', // 初始化路由
+      initialRoute: '/', // 初始化路由
       // routes: routes,
       onGenerateRoute: (RouteSettings settings) {
          print("=====");
