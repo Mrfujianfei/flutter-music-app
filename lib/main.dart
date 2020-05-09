@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', // 初始化路由
       // routes: routes,
       onGenerateRoute: (RouteSettings settings) {
-         print("=====");
+        print("=====");
         print(settings);
         return MaterialPageRoute(
           builder: routes[settings.name],

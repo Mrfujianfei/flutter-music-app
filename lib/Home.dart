@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'Home2.dart';
+import 'pages/recommend.dart';
+import 'widgets/calendar_today.dart';
 import 'widgets/tab_view.dart';
 
 class Home extends StatelessWidget {
@@ -11,20 +14,12 @@ class Home extends StatelessWidget {
       ),
       body: TabView(
         tabMenus: <Widget>[
-          Text("tab1"),
-          Text("tab2"),
-          Text("tab3"),
+          CalendarToday(),
+          Icon(Icons.music_note,size:38.0,),
         ],
         children: <Widget>[
-          Container(
-            color: Colors.grey,
-          ),
-          Container(
-            color: Colors.orange,
-          ),
-          Container(
-            color: Colors.green,
-          )
+          Recommend(),
+          Home2(),
         ],
       ),
     );
