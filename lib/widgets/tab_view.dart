@@ -33,14 +33,24 @@ class _TabViewState extends State<TabView> {
   }
 
   List<Widget> _tabMenus() {
-    return widget.tabMenus
-        .map((item) => SizedBox(
-              width: TAB_WIDTH,
-              child: Center(
-                child: item,
-              ),
-            ))
-        .toList();
+    List<Widget> _list = [];
+    for (var i = 0; i < widget.tabMenus.length; i++) {
+      _list.add(
+        GestureDetector(
+          onTap: () {
+            _controller.animateToPage(i,
+                duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+          },
+          child: SizedBox(
+            width: TAB_WIDTH,
+            child: Center(
+              child: widget.tabMenus[i],
+            ),
+          ),
+        ),
+      );
+    }
+    return _list;
   }
 
   @override

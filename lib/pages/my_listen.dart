@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:musicapp/model/music.dart';
 import 'package:musicapp/widgets/music_list_item.dart';
-import 'package:musicapp/widgets/welcome.dart';
 
-class Recommend extends StatelessWidget {
+class MyListen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> _list = [];
@@ -18,15 +17,8 @@ class Recommend extends StatelessWidget {
       ));
     }
     return ListView(
+      padding: EdgeInsets.only(top: 10.0),
       children: <Widget>[
-        Welcome(),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-          child: Text(
-            "今日推荐·精选",
-            style: TextStyle(fontSize: 18.0),
-          ),
-        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(

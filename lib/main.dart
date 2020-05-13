@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:musicapp/route/index.dart';
+import 'package:musicapp/router/index.dart';
 
 void main() => runApp(MyApp());
 

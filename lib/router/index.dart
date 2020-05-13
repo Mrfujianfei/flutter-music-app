@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:musicapp/Home2.dart';
+import 'package:musicapp/pages/home.dart';
 
-import '../Home.dart';
-import '../Home2.dart';
 
 final Map<String,WidgetBuilder> routes = {
    '/':(context)=>Home(),
