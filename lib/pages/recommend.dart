@@ -20,6 +20,12 @@ class Recommend extends StatelessWidget {
     return ListView(
       children: <Widget>[
         Welcome(),
+        FlatButton(onPressed: (){
+          print("11");
+          Navigator.of(context).pushNamed('/player');
+        }, child: Text(
+          "听歌"
+        )),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: Text(
