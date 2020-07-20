@@ -21,12 +21,11 @@ class NetUnits {
       // 'accept-language': 'zh-cn',
       // 'content-type': 'application/json',
     };
-    dio.options.baseUrl = "http://127.0.0.1:3300";
+    dio.options.baseUrl = "http://192.168.18.186:3300/";
     // dio.options.connectTimeout = 30000;
     // cookie管理
     var cookieJar = CookieJar();
     dio.interceptors.add(CookieManager(cookieJar));
-    print(cookieJar.loadForRequest(Uri.parse("https://baidu.com/")));
     // 请求拦截
     dio.interceptors.add(
       InterceptorsWrapper(

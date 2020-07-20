@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:musicapp/provider/music_model.dart';
 import 'package:musicapp/router/index.dart';
+import 'package:provider/provider.dart';
+void main(){
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MusicProviderModel()..init()),
+      ],
+      child: MyApp(),
+    ),
+  );
+}
 
-void main() => runApp(MyApp());
+
 
 class MyApp extends StatelessWidget {
   @override
@@ -15,10 +27,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', // 初始化路由
       // routes: routes,
       onGenerateRoute: (RouteSettings settings) {
-        print("=====");
-        print(settings);
         return MaterialPageRoute(
-          builder: routes[settings.name],
+          builder:getRoutes(settings)[settings.name],
           settings: settings
         );
       },

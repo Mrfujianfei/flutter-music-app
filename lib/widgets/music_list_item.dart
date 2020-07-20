@@ -42,6 +42,16 @@ class MusicListItem extends StatelessWidget {
             child: Icon(Icons.assessment),
           ),
         ),
+        Padding(
+          padding: EdgeInsets.only(left: 20.0, right: 10.0),
+          child: Text(
+            "${data.duration}",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[500]
+            ),
+          ),
+        ),
       ],
     );
   }
