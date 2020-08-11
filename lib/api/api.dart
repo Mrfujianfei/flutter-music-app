@@ -1,3 +1,4 @@
+import 'package:musicapp/model/lyerics.dart';
 import 'package:musicapp/model/ranking_list.dart';
 import 'package:musicapp/model/recommend_list.dart';
 import 'package:musicapp/units/net_units.dart';
@@ -57,6 +58,15 @@ class Api {
    */
   static Future<Map<String, dynamic>> getPlayerUrl(Map<String, dynamic> params) async {
     var response = await _net.get('/song/urls?id=${params['id']}', {});
+    return response.data;
+  }
+
+  /**
+   * 获取歌词
+   * id: 歌曲的 songmid，必填，多个用逗号分割，该接口可用 post 或 get
+   */
+  static Future<Map<String, dynamic>> getLyerics(String songmid) async {
+    var response = await _net.get('/lyric?songmid=${songmid}', {});
     return response.data;
   }
 }

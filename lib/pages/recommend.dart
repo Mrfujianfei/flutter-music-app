@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:musicapp/api/api.dart';
+import 'package:musicapp/model/lyerics.dart';
 import 'package:musicapp/model/music.dart';
 import 'package:musicapp/model/ranking_list.dart';
-import 'package:musicapp/model/recommend_list.dart';
 import 'package:musicapp/model/song.dart';
 import 'package:musicapp/provider/music_model.dart';
 import 'package:musicapp/widgets/music_list_item.dart';
@@ -14,9 +14,11 @@ class Recommend extends StatefulWidget {
   _RecommendState createState() => _RecommendState();
 }
 
-class _RecommendState extends State<Recommend> {
+class _RecommendState extends State<Recommend>
+    with AutomaticKeepAliveClientMixin<Recommend> {
   var _futureBuilderFuture;
   List<Widget> _list = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -31,18 +33,33 @@ class _RecommendState extends State<Recommend> {
     List<RankDetail> result = await Api.getRankingDetail({});
     var index = 1;
     result.forEach((item) {
-      _list.add(FlatButton(onPressed: (){
-        Navigator.of(context).pushNamed('/player',arguments: {
-          "mid":item.mid
-        });
-      }, child: MusicListItem(
-          data: MusicLabel(
-              index: index,
-              name: item.name,
-              author: item.singerName,
-              isPlay: false,
-              duration: item.duration),
-        )));
+      _list.add(FlatButton(
+          onPressed: () {
+            print("=1111");
+            print(item.mid);
+            Provider.of<MusicProviderModel>(context, listen: false).playSong(
+              Song(
+                item.id,
+                mid: item.mid,
+                name: item.name,
+                singer: item.singerName,
+                picUrl: '',
+                playUrl: '',
+                addTime: new DateTime.now(),
+              ),
+            );
+            // 跳转到播放页
+            print("--------");
+            Navigator.of(context).pushNamed('/playingTabs');
+          },
+          child: MusicListItem(
+            data: MusicLabel(
+                index: index,
+                name: item.name,
+                author: item.singerName,
+                isPlay: false,
+                duration: item.duration),
+          )));
       index++;
     });
   }
@@ -79,6 +96,12 @@ class _RecommendState extends State<Recommend> {
     return ListView(
       children: <Widget>[
         Welcome(),
+        FlatButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed('/search');
+          },
+          child: Text("搜索"),
+        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: Text(
@@ -90,4 +113,8 @@ class _RecommendState extends State<Recommend> {
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

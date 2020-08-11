@@ -58,20 +58,28 @@ class _TabViewState extends State<TabView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5),
-          child: Row(
-            children: _tabMenus(),
+        Offstage(
+          offstage: widget.tabMenus.length == 0,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5),
+            child: SafeArea(
+              child: Row(
+                children: _tabMenus(),
+              ),
+            ),
           ),
         ),
-        Transform(
-          transform: Matrix4.translationValues(_labelBorder, 0.0, 0.0),
-          child: Container(
-            height: 5.0,
-            width: 20.0,
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(30.0),
+        Offstage(
+          offstage: widget.tabMenus.length == 0,
+          child: Transform(
+            transform: Matrix4.translationValues(_labelBorder, 0.0, 0.0),
+            child: Container(
+              height: 5.0,
+              width: 20.0,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(30.0),
+              ),
             ),
           ),
         ),

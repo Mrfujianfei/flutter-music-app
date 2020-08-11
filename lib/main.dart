@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:musicapp/provider/music_model.dart';
 import 'package:musicapp/router/index.dart';
 import 'package:provider/provider.dart';
-void main(){
+
+void main() {
   runApp(
     MultiProvider(
       providers: [
@@ -12,8 +13,6 @@ void main(){
     ),
   );
 }
-
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -28,15 +27,11 @@ class MyApp extends StatelessWidget {
       // routes: routes,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-          builder:getRoutes(settings)[settings.name],
-          settings: settings
-        );
+            builder: getRoutes(settings)[settings.name], settings: settings);
       },
-      onUnknownRoute:(settings){
+      onUnknownRoute: (settings) {
         print(settings);
-      } ,
+      },
     );
   }
 }
-
-

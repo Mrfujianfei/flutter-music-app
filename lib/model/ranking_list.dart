@@ -33,12 +33,12 @@ class RankList {
 class RankDetail {
   final int id;
   final String singerName;
-  final String time_public;
+  final String timePublic;
   final String name;
   final String mid;
   final String duration;
 
-  RankDetail(this.id, this.singerName, this.time_public, this.name, this.mid,
+  RankDetail(this.id, this.singerName, this.timePublic, this.name, this.mid,
       this.duration);
 
    static _getDuration(int interval){
@@ -50,7 +50,7 @@ class RankDetail {
   RankDetail.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         singerName = json['singerName'],
-        time_public = json['time_public'],
+        timePublic = json['time_public'],
         name = json['name'],
         mid = json['mid'],
         duration = _getDuration(json['interval']);
