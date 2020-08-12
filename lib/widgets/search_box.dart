@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class SearchBox extends StatefulWidget {
   Function onSubmit;
-  SearchBox({this.onSubmit});
+  Function onChange;
+  SearchBox({this.onSubmit, this.onChange});
 
   @override
   _SearchBoxState createState() => _SearchBoxState();
@@ -74,6 +75,7 @@ class _SearchBoxState extends State<SearchBox> {
                         ),
                         onSubmitted: widget.onSubmit,
                         onChanged: (value) {
+                          widget.onChange(value);
                           if (!_isShowHint && value != '') {
                             return;
                           }

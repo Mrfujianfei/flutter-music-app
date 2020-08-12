@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:musicapp/model/song.dart';
 
 class SearchLabel extends StatefulWidget {
   Duration dely;
-  SearchLabel(this.dely);
+  Song song;
+  SearchLabel(this.dely, this.song);
   @override
   _SearchLabelState createState() => _SearchLabelState();
 }
@@ -83,7 +85,7 @@ class _SearchLabelState extends State<SearchLabel>
                       ),
                       child: ClipOval(
                         child: Image.network(
-                          "https://y.gtimg.cn/music/photo_new/T002R300x300M000003liBFL3sa6cE.jpg",
+                          widget.song.picUrl,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -106,7 +108,7 @@ class _SearchLabelState extends State<SearchLabel>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "啊士大夫文士大夫萨芬撒旦阿斯蒂芬阿斯顿阿斯顿人给",
+                        widget.song.name,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
@@ -114,9 +116,10 @@ class _SearchLabelState extends State<SearchLabel>
                         height: 5.0,
                       ),
                       Text(
-                        "sdfsdffsfasdfasdf",
+                        "${widget.song.singer}     专辑:《${widget.song.ablbumName}》",
                         style:
                             TextStyle(color: Colors.grey[600], fontSize: 12.0),
+                        overflow: TextOverflow.ellipsis,
                       )
                     ],
                   ),
@@ -125,7 +128,7 @@ class _SearchLabelState extends State<SearchLabel>
               SizedBox(
                 width: 60.0,
                 child: Text(
-                  "04:30",
+                  widget.song.duration,
                   textAlign: TextAlign.right,
                 ),
               )

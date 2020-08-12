@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:musicapp/api/api.dart';
+import 'package:musicapp/model/song.dart';
 import 'package:musicapp/widgets/search_box.dart';
 import 'package:musicapp/widgets/search_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +28,12 @@ class _SearchPageState extends State<SearchPage> {
 
   ScrollController _controller;
 
+  int pageNo = 1;
+
+  int pageSize = 20;
+
+  String _searchValue = '';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -43,6 +51,7 @@ class _SearchPageState extends State<SearchPage> {
         setState(() {
           _isLoadingMore = true;
         });
+        pageNo += 1;
         _doSearch();
       }
     });
@@ -56,6 +65,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _onSubmit(value) async {
+    _searchValue = value;
     if (value == '') {
       setState(() {
         _list = [];
@@ -77,28 +87,27 @@ class _SearchPageState extends State<SearchPage> {
     _doSearch();
   }
 
-  _doSearch() {
+  _doSearch() async {
     // 没有更多数据了
-    if (_list.length > 20) {
+    if (_list.length > 50 || !_hasMore) {
       setState(() {
         _hasMore = false;
         _isLoadingMore = false;
       });
       return;
     }
-    Future.delayed(Duration(milliseconds: 3000), () {
-      _isLoadingMore = false;
-      _isLoading = false;
-      _renderList(
-          ['data1', 'data2', 'data3', 'data2', 'data3', 'data2', 'data3']);
-    });
+
+    List<Song> result = await Api.doSearch(
+        {"key": _searchValue, "pageNo": pageNo, 'pageSize': pageSize});
+    _isLoadingMore = false;
+    _isLoading = false;
+    _hasMore = result.length < pageSize ? false : true;
+    _renderList(result);
   }
 
   _renderList(dataList) {
     for (var i = 0; i < dataList.length; i++) {
-      _list.add(SearchLabel(
-        Duration(milliseconds: i * 100),
-      ));
+      _list.add(SearchLabel(Duration(milliseconds: 100), dataList[i]));
     }
     setState(() {});
   }
@@ -126,6 +135,14 @@ class _SearchPageState extends State<SearchPage> {
         children: <Widget>[
           SearchBox(
             onSubmit: _onSubmit,
+            onChange: (value) {
+              if (value == '') {
+                setState(() {
+                  _list = [];
+                });
+                return;
+              }
+            },
           ),
           Offstage(
             offstage: _list.length != 0 || _isLoading,

@@ -39,7 +39,7 @@ class _RecommendState extends State<Recommend>
             print(item.mid);
             Provider.of<MusicProviderModel>(context, listen: false).playSong(
               Song(
-                item.id,
+                item.id.toString(),
                 mid: item.mid,
                 name: item.name,
                 singer: item.singerName,

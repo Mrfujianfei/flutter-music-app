@@ -1,6 +1,7 @@
 import 'package:musicapp/model/lyerics.dart';
 import 'package:musicapp/model/ranking_list.dart';
 import 'package:musicapp/model/recommend_list.dart';
+import 'package:musicapp/model/song.dart';
 import 'package:musicapp/units/net_units.dart';
 
 class Api {
@@ -68,5 +69,22 @@ class Api {
   static Future<Map<String, dynamic>> getLyerics(String songmid) async {
     var response = await _net.get('/lyric?songmid=${songmid}', {});
     return response.data;
+  }
+
+  /**
+   * 搜索歌曲
+   * key ：关键字
+   * pageNo: 分页符
+   * pageSize：每页条数
+   * t： 0：单曲，2：歌单，7：歌词，8：专辑，9：歌手，12：mv
+   */
+  static Future<List<Song>> doSearch(Map<String, dynamic> params) async {
+    var response = await _net.get('/search', params);
+    var result = response.data;
+    List<Song> _list = [];
+    result['data']['list'].forEach((item) {
+      _list.add(Song.fromJson(item));
+    });
+    return _list;
   }
 }
