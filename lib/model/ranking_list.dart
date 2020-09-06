@@ -37,9 +37,10 @@ class RankDetail {
   final String name;
   final String mid;
   final String duration;
+  final String albumMid;
 
   RankDetail(this.id, this.singerName, this.timePublic, this.name, this.mid,
-      this.duration);
+      this.duration,this.albumMid);
 
    static _getDuration(int interval){
     String min = (interval~/60).toString(); // 分钟
@@ -53,5 +54,6 @@ class RankDetail {
         timePublic = json['time_public'],
         name = json['name'],
         mid = json['mid'],
+        albumMid = json['albumMid'],
         duration = _getDuration(json['interval']);
 }

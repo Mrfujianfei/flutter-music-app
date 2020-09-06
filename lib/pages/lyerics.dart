@@ -43,7 +43,6 @@ class _LyericsState extends State<Lyerics>
   void initState() {
     // TODO: implement initState
     super.initState();
-
     _currentTime = new Duration(milliseconds: 0);
 
     // 初始化_controller内容
@@ -101,7 +100,7 @@ class _LyericsState extends State<Lyerics>
   }
 
   _jumpToLine() {
-    if (_touching) {
+    if (_touching || _source.length ==0) {
       return;
     }
     LyericsModel model = _source.firstWhere((item) {
@@ -135,9 +134,9 @@ class _LyericsState extends State<Lyerics>
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-
     _isReachBottom =true;
   }
+
 
   @override
   // TODO: implement wantKeepAlive

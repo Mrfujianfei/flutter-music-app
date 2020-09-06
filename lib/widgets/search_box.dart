@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class SearchBox extends StatefulWidget {
   Function onSubmit;
   Function onChange;
-  SearchBox({this.onSubmit, this.onChange});
+  String value;
+  SearchBox({this.onSubmit, this.onChange, this.value});
 
   @override
   _SearchBoxState createState() => _SearchBoxState();
@@ -13,6 +14,8 @@ class _SearchBoxState extends State<SearchBox> {
   bool _isShowHint = true;
 
   double _width = 70.0;
+
+  TextEditingController _value = TextEditingController();
 
   @override
   void initState() {
@@ -24,6 +27,20 @@ class _SearchBoxState extends State<SearchBox> {
         _width = 420.0;
       });
     });
+
+    _value.text = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(SearchBox oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      setState(() {
+        _value.text = widget.value;
+        _isShowHint = false;
+      });
+    }
   }
 
   @override
@@ -67,6 +84,7 @@ class _SearchBoxState extends State<SearchBox> {
                     Container(
                       height: 25.0,
                       child: TextField(
+                        controller: _value,
                         cursorWidth: 1.0,
                         maxLength: 20,
                         style: TextStyle(

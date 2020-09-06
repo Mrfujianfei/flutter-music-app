@@ -9,22 +9,39 @@ class Song {
   DateTime addTime; // 添加时间
   String duration; // 歌曲时长
   String ablbumName; // 专辑名称
+  bool disabled;
 
-  Song(
-    this.id, {
-    this.mid,
-    this.name,
-    this.singer,
-    this.picUrl,
-    this.playUrl = '',
-    this.addTime,
-    this.albumId,
-    this.ablbumName,
-    this.duration,
-  });
+  Song(this.id,
+      {this.mid,
+      this.name,
+      this.singer,
+      this.picUrl,
+      this.playUrl = '',
+      this.addTime,
+      this.albumId,
+      this.ablbumName,
+      this.duration,
+      this.disabled = false});
+
+  initPicUrl(){
+     this.picUrl =
+        "https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.albumId}.jpg";
+  }
 
   setPlayUrl(String url) {
     this.playUrl = url;
+    this.addTime = new DateTime.now();
+    this.disabled = false;
+  }
+
+  setAddTime(DateTime time) {
+    this.addTime = time;
+  }
+
+  setDisabled(bool value) {
+    this.disabled = value;
+    // 更新时间
+    this.addTime = new DateTime.now();
   }
 
   static _getDuration(int interval) {
@@ -36,19 +53,21 @@ class Song {
   }
 
   Song.fromJson(Map<String, dynamic> json)
-      : id = json['id']!=null ? int.parse(json['id']) : json['songmid'],
+      : id = json['id'] != null ? int.parse(json['id']) : json['songmid'],
         mid = json['songmid'].toString(),
-        albumId = json['albumId'].toString(),
+        albumId = json['albummid'].toString(),
         name = json['songname'],
         singer = json['singer'][0]['name'],
-        picUrl = "https://y.gtimg.cn/music/photo_new/T002R300x300M000${json['albummid']}.jpg",
-        playUrl ="",
+        picUrl =
+            "https://y.gtimg.cn/music/photo_new/T002R300x300M000${json['albummid']}.jpg",
+        playUrl = "",
         addTime = null,
         duration = _getDuration(json['interval']),
-        ablbumName = json['albumname'];
+        ablbumName = json['albumname'],
+        disabled = false;
 
   @override
   String toString() {
-    return 'Song{id: $id,mid:$mid,singer:$singer,playUrl:$playUrl, name: $name, artists: $singer}';
+    return 'Song{id: $id,mid:$mid,albumId:$albumId,picUrl:$picUrl,addTime:$addTime,singer:$singer,playUrl:$playUrl, name: $name, artists: $singer}';
   }
 }

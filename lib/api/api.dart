@@ -1,3 +1,4 @@
+import 'package:musicapp/model/comment.dart';
 import 'package:musicapp/model/lyerics.dart';
 import 'package:musicapp/model/ranking_list.dart';
 import 'package:musicapp/model/recommend_list.dart';
@@ -17,7 +18,6 @@ class Api {
       Map<String, dynamic> params) async {
     var response = await _net
         .get('http://192.168.18.186:3300/song/urls', {"id": "0029Trp4461bN9"});
-    print(response);
     return RecommendList.fromJson(response.data);
   }
 
@@ -42,7 +42,8 @@ class Api {
    * pageSize: 默认 100 // 部分接口不支持这个字段，所以这里默认选择100
    * time:  默认当前时间，如果有 period，此参数无效
    */
-  static Future<List<RankDetail>> getRankingDetail(Map<String, dynamic> params) async {
+  static Future<List<RankDetail>> getRankingDetail(
+      Map<String, dynamic> params) async {
     var response = await _net.get('/top', params);
     List<RankDetail> list = [];
     if (response.data != null) {
@@ -53,11 +54,12 @@ class Api {
     return list;
   }
 
-   /**
+  /**
    * 获取播放连接
    * id: 歌曲的 songmid，必填，多个用逗号分割，该接口可用 post 或 get
    */
-  static Future<Map<String, dynamic>> getPlayerUrl(Map<String, dynamic> params) async {
+  static Future<Map<String, dynamic>> getPlayerUrl(
+      Map<String, dynamic> params) async {
     var response = await _net.get('/song/urls?id=${params['id']}', {});
     return response.data;
   }
@@ -83,8 +85,46 @@ class Api {
     var result = response.data;
     List<Song> _list = [];
     result['data']['list'].forEach((item) {
+      print(item.toString());
       _list.add(Song.fromJson(item));
     });
     return _list;
+  }
+
+  /**
+   * 搜索歌曲
+   * key ：关键字
+   * pageNo: 分页符
+   * pageSize：每页条数
+   * t： 0：单曲，2：歌单，7：歌词，8：专辑，9：歌手，12：mv
+   */
+  static Future<Map<String, dynamic>> getCommentList(
+      Map<String, dynamic> params) async {
+    var response =
+        await _net.get('/comment', {"type": 1, "biztype": 1, ...params});
+    var result = response.data;
+    List<CommentModel> _list = [];
+    // qq评论
+    if (params['origin'] == 0 &&result['comment']['commentlist']!=null) {
+      result['comment']['commentlist'].forEach((item) {
+        _list.add(CommentModel.fromJson(item));
+      });
+    }
+    // 网易云评论
+    if (params['origin'] == 1) {
+      result['body']['hotComments'].forEach((item) {
+        _list.add(CommentModel.fromJson({
+          "avatarurl": item['user']['avatarUrl'],
+          "nick": item['user']['nickname'],
+          "rootcommentcontent": item['content'],
+          "praisenum": item['likedCount'],
+          "time": item['time']
+        }));
+      });
+    }
+    return {
+      "list": _list,
+      "songId": params['origin'] == 1 ? result['songId'] : null
+    };
   }
 }

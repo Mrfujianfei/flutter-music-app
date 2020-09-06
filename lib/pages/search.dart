@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:musicapp/api/api.dart';
 import 'package:musicapp/model/song.dart';
+import 'package:musicapp/provider/music_model.dart';
 import 'package:musicapp/widgets/search_box.dart';
 import 'package:musicapp/widgets/search_label.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchPage extends StatefulWidget {
@@ -72,15 +74,16 @@ class _SearchPageState extends State<SearchPage> {
       });
       return;
     }
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> searchList = prefs.getStringList("searchList");
     // 将最新输入的放前面
-    searchList = searchList == null ? [value] : [value, ...searchList];
-    if (searchList.length > 10) {
-      searchList = searchList.sublist(0, 10);
+    bool isExtend = _chips.indexOf(_searchValue) >= 0 ? true : false;
+    // 判断是否已经存在
+    if (!isExtend) {
+      _chips.insert(0,_searchValue);
     }
-    prefs.setStringList("searchList", searchList);
-    _chips = searchList;
+
+    if (_chips.length > 10) {
+      _chips = _chips.sublist(0, 10);
+    }
     setState(() {
       _isLoading = true;
     });
@@ -107,7 +110,28 @@ class _SearchPageState extends State<SearchPage> {
 
   _renderList(dataList) {
     for (var i = 0; i < dataList.length; i++) {
-      _list.add(SearchLabel(Duration(milliseconds: 100), dataList[i]));
+      Song song = dataList[i];
+      _list.add(
+        GestureDetector(
+          onTap: () {
+            Provider.of<MusicProviderModel>(context, listen: false).playSong(
+              song,
+            );
+            // 跳转到播放页
+            Navigator.of(context).pushNamed('/playingTabs');
+          },
+          onHorizontalDragDown: (a) {
+            print(a);
+          },
+          onHorizontalDragUpdate: (a) {
+            print(a);
+          },
+          child: Dismissible(
+            key: Key(song.id),
+            child: SearchLabel(Duration(milliseconds: 100), song),
+          ),
+        ),
+      );
     }
     setState(() {});
   }
@@ -117,13 +141,26 @@ class _SearchPageState extends State<SearchPage> {
       return InputChip(
         label: Text(item),
         deleteIcon: Icon(Icons.close, size: 15.0),
-        onDeleted: () {},
+        onDeleted: () {
+          _chips.remove(item);
+          setState(() {});
+        },
         onSelected: (isSelected) {
-          print(isSelected);
+          _onSubmit(item);
         },
         backgroundColor: Colors.grey[200],
       );
     })).toList();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    // 退出页面的时候保存
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setStringList("searchList", _chips);
+    });
   }
 
   @override
@@ -134,6 +171,7 @@ class _SearchPageState extends State<SearchPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SearchBox(
+            value: _searchValue,
             onSubmit: _onSubmit,
             onChange: (value) {
               if (value == '') {

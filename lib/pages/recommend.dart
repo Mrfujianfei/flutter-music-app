@@ -1,13 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:musicapp/api/api.dart';
-import 'package:musicapp/model/lyerics.dart';
 import 'package:musicapp/model/music.dart';
 import 'package:musicapp/model/ranking_list.dart';
 import 'package:musicapp/model/song.dart';
 import 'package:musicapp/provider/music_model.dart';
+import 'package:musicapp/widgets/comment_list.dart';
 import 'package:musicapp/widgets/music_list_item.dart';
 import 'package:musicapp/widgets/welcome.dart';
 import 'package:provider/provider.dart';
+import 'package:musicapp/widgets/popup.dart';
 
 class Recommend extends StatefulWidget {
   @override
@@ -18,13 +21,12 @@ class _RecommendState extends State<Recommend>
     with AutomaticKeepAliveClientMixin<Recommend> {
   var _futureBuilderFuture;
   List<Widget> _list = [];
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    // 用_futureBuilderFuture保存_getData的结果，以避免不必要的UI重绘
+    // 用_futureBuilderFuture保存_getData的结果，9以避免不必要的UI重绘
     _futureBuilderFuture = _getData();
   }
 
@@ -33,23 +35,27 @@ class _RecommendState extends State<Recommend>
     List<RankDetail> result = await Api.getRankingDetail({});
     var index = 1;
     result.forEach((item) {
-      _list.add(FlatButton(
+      _list.add(
+        FlatButton(
           onPressed: () {
-            print("=1111");
-            print(item.mid);
+            print(item.albumMid);
+            print(item);
+            // return;
+            Song song = Song(
+              item.id.toString(),
+              mid: item.mid,
+              albumId: item.albumMid,
+              name: item.name,
+              singer: item.singerName,
+              picUrl: '',
+              playUrl: '',
+              addTime: new DateTime.now(),
+            )..initPicUrl();
+            print(song);
             Provider.of<MusicProviderModel>(context, listen: false).playSong(
-              Song(
-                item.id.toString(),
-                mid: item.mid,
-                name: item.name,
-                singer: item.singerName,
-                picUrl: '',
-                playUrl: '',
-                addTime: new DateTime.now(),
-              ),
+              song,
             );
             // 跳转到播放页
-            print("--------");
             Navigator.of(context).pushNamed('/playingTabs');
           },
           child: MusicListItem(
@@ -59,7 +65,9 @@ class _RecommendState extends State<Recommend>
                 author: item.singerName,
                 isPlay: false,
                 duration: item.duration),
-          )));
+          ),
+        ),
+      );
       index++;
     });
   }
@@ -96,12 +104,6 @@ class _RecommendState extends State<Recommend>
     return ListView(
       children: <Widget>[
         Welcome(),
-        FlatButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed('/search');
-          },
-          child: Text("搜索"),
-        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: Text(

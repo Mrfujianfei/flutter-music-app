@@ -20,7 +20,7 @@ class PlayingTab extends StatelessWidget {
           ),
           Consumer<MusicProviderModel>(
             builder: (context, model, child) {
-              return NavBar(title: model.curSong.name);
+              return NavBar(title: "${model.curSong.name}--${model.curSong.singer}");
             },
           ),
         ],

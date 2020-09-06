@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 // 旋转唱片
 class AnimatedRecord extends StatefulWidget {
   AnimationController controller;
-  AnimatedRecord({this.controller});
+  String url;
+  AnimatedRecord({this.controller, this.url});
   @override
   _AnimatedRecordState createState() => _AnimatedRecordState();
 }
@@ -26,10 +27,12 @@ class _AnimatedRecordState extends State<AnimatedRecord> {
       child: RotationTransition(
         turns: widget.controller,
         child: SizedBox(
-          width: 240.0,
-          height: 240.0,
+          width: double.maxFinite,
+          height: double.maxFinite,
           child: ClipOval(
-            child: Image.asset('assets/song.png'),
+            child: widget.url != ''
+                ? Image.network(widget.url)
+                : DecoratedBox(decoration: BoxDecoration(color: Colors.green)),
           ),
         ),
       ),

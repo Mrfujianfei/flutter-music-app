@@ -31,6 +31,7 @@ dependencies:
   provider: ^4.0.2
   loading_animations: "^2.1.0"
   shared_preferences: ^0.5.8  
+  date_format: 1.0.8
 
 
   
@@ -49,6 +50,7 @@ flutter:
     - assets/sun.svg
     - assets/song.png
     - assets/Royal.jpg
+    - assets/header.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
