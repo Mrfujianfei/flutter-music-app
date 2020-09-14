@@ -1,3 +1,5 @@
+import 'package:musicapp/units/common_fun.dart';
+
 class Song {
   String id; // 歌曲id
   String mid; // 歌曲的mid
@@ -47,24 +49,37 @@ class Song {
   static _getDuration(int interval) {
     String min = (interval ~/ 60).toString(); // 分钟
     String sec = (interval % 60).toString(); // 秒
-    return (min.length < 2 ? '0' + min : min) +
-        ':' +
-        (sec.length < 2 ? '0' + sec : sec);
+    return (min.length < 2 ? '0' + min : min) + ':' + (sec.length < 2 ? '0' + sec : sec);
   }
 
   Song.fromJson(Map<String, dynamic> json)
-      : id = json['id'] != null ? int.parse(json['id']) : json['songmid'],
+      : id = json['id'] != null ? json['id'] : json['songmid'],
         mid = json['songmid'].toString(),
         albumId = json['albummid'].toString(),
         name = json['songname'],
-        singer = json['singer'][0]['name'],
-        picUrl =
-            "https://y.gtimg.cn/music/photo_new/T002R300x300M000${json['albummid']}.jpg",
-        playUrl = "",
-        addTime = null,
-        duration = _getDuration(json['interval']),
+        singer = isEmpty(json['singer']) ? json['singerName'] : json['singer'][0]['name'] ,
+        picUrl = "https://y.gtimg.cn/music/photo_new/T002R300x300M000${json['albummid']}.jpg",
+        playUrl = isEmpty(json['playUrl']) ?  "" : json['playUrl'] ,
+        addTime = isEmpty(json['addTime']) ?  null : new DateTime.fromMicrosecondsSinceEpoch(json['addTime']),
+        duration = isEmpty(json['interval'])? json['duration'] : _getDuration(json['interval']),
         ablbumName = json['albumname'],
-        disabled = false;
+        disabled = json['disabled'] == 'true';
+  
+  Map<String, dynamic> toJson(){
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['songmid'] = this.mid;
+    data['albummid'] = this.albumId;
+    data['songname'] = this.name;
+    data['singerName'] = this.singer;
+    data['picUrl'] = this.picUrl;
+    data['playUrl'] = this.playUrl;
+    data['addTime'] = this.addTime!=null?this.addTime.microsecondsSinceEpoch:null;
+    data['duration'] = this.duration;
+    data['albumname'] = this.ablbumName;
+    data['disabled'] = this.disabled.toString();
+    return data;
+  }
 
   @override
   String toString() {

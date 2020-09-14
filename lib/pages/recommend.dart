@@ -27,7 +27,7 @@ class _RecommendState extends State<Recommend>
     super.initState();
 
     // 用_futureBuilderFuture保存_getData的结果，9以避免不必要的UI重绘
-    _futureBuilderFuture = _getData();
+    // _futureBuilderFuture = _getData();
   }
 
   Future _getData() async {

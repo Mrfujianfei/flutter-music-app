@@ -32,7 +32,7 @@ class Api {
         list.add(RankList.fromJson(item));
       }).toList();
     }
-    return list;
+    return []; // list;
   }
 
   /**
@@ -51,7 +51,7 @@ class Api {
         list.add(RankDetail.fromJson(item));
       }).toList();
     }
-    return list;
+    return []; //list;
   }
 
   /**
